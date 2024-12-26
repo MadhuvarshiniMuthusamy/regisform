@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Password Validation</title>
+<!-- Bootstrap CSS -->
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body style="background-image: url('form.jpg'); background-size: cover; position: relative;">
+<div class="container mt-5">
+    <div class="card shadow-lg rounded">
+        <div class="card-header bg-primary text-white">
+            <h3 class="mb-0">Registration Form</h3>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <form id="myForm" onsubmit="return validateForm()" style="background-color: #f2f2f2; padding: 20px; border-radius: 15px;">
+                        <!-- Background color added to the form -->
+                        <div class="form-group">
+                            <label for="name">Name:</label>
+                            <input type="text" class="form-control custom-input" id="name" placeholder="Enter your name">
+                            <span id="nameError" class="error"></span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">Email:</label>
+                            <input type="email" class="form-control custom-input" id="email" placeholder="Enter your email">
+                            <span id="emailError" class="error"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password">Password:</label>
+                            <input type="password" class="form-control custom-input" id="password" placeholder="Enter your password">
+                            <span id="passwordError" class="error"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="confirmPassword">Confirm Password:</label>
+                            <input type="password" class="form-control custom-input" id="confirmPassword" placeholder="Confirm your password">
+                            <span id="confirmPasswordError" class="error"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Gender:</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="gender" id="male" value="male">
+                                <label class="form-check-label" for="male">Male</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="gender" id="female" value="female">
+                                <label class="form-check-label" for="female">Female</label>
+                            </div>
+                            <span id="genderError" class="error"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="country">Country:</label>
+                            <select class="form-control custom-input" id="country">
+                                <option value="">Select</option>
+                                <option value="usa">USA</option>
+                                <option value="uk">UK</option>
+                                <option value="canada">Canada</option>
+                            </select>
+                            <span id="countryError" class="error"></span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="languages">Known Languages:</label><br>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="english" value="English">
+                                <label class="form-check-label" for="english">English</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="spanish" value="Spanish">
+                                <label class="form-check-label" for="spanish">Spanish</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="french" value="French">
+                                <label class="form-check-label" for="french">French</label>
+                            </div>
+                            <!-- Add more languages as needed -->
+                            <span id="languagesError" class="error"></span>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="mt-4">
+                        <h4>Entered Information:</h4>
+                        <table class="table table-bordered">
+                            <tbody id="userData">
+                                <tr>
+                                    <th>Name:</th>
+                                    <td id="enteredName"></td>
+                                </tr>
+                                <tr>
+                                    <th>Email:</th>
+                                    <td id="enteredEmail"></td>
+                                </tr>
+                                <tr>
+                                    <th>Password:</th>
+                                    <td id="enteredPassword"></td>
+                                </tr>
+                                <tr>
+                                    <th>Gender:</th>
+                                    <td id="enteredGender"></td>
+                                </tr>
+                                <tr>
+                                    <th>Country:</th>
+                                    <td id="enteredCountry"></td>
+                                </tr>
+                                <tr>
+                                    <th>Known Languages:</th>
+                                    <td id="enteredLanguages"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS and jQuery (for Bootstrap) -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<!-- JavaScript for validation -->
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    // Disable the "Agree to terms" checkbox on page load
+    document.getElementById('checkbox').disabled = true;
+});
+
+function validateForm() {
+    var name = document.getElementById('name').value;
+    var email = document.getElementById('email').value;
+    var password = document.getElementById('password').value;
+    var confirmPassword = document.getElementById('confirmPassword').value;
+    var agreeTerms = document.getElementById('checkbox').checked;
+    var gender = document.querySelector('input[name="gender"]:checked');
+    var country = document.getElementById('country').value;
+    var languages = document.querySelectorAll('input[type="checkbox"]:checked');
+    var errorElements = document.getElementsByClassName('error');
+
+    // Clear previous error messages
+    for (var i = 0; i < errorElements.length; i++) {
+        errorElements[i].innerHTML = '';
+    }
+
+    var isValid = true;
+
+    // Name validation
+    if (name === '') {
+        document.getElementById('nameError').innerHTML = 'Please enter your name';
+        isValid = false;
+    }
+
+    // Email validation
+    if (email === '') {
+        document.getElementById('emailError').innerHTML = 'Please enter your email';
+        isValid = false;
+    }
+
+    // Password validation
+    if (password === '') {
+        document.getElementById('passwordError').innerHTML = 'Please enter your password';
+        isValid = false;
+    } else if (!/(?=.*\d)(?=.*[a-zA-Z]).{8,}/.test(password)) {
+        document.getElementById('passwordError').innerHTML = 'Password must contain at least one digit and one character, and be at least 8 characters long';
+        isValid = false;
+    }
+
+    // Confirm password validation
+    if (confirmPassword === '') {
+        document.getElementById('confirmPasswordError').innerHTML = 'Please confirm your password';
+        isValid = false;
+    } else if (password !== confirmPassword) {
+        document.getElementById('confirmPasswordError').innerHTML = 'Passwords do not match';
+        isValid = false;
+    }
+
+    // Gender validation
+    if (!gender) {
+        document.getElementById('genderError').innerHTML = 'Please select your gender';
+        isValid = false;
+    }
+
+    // Country validation
+    if (country === '') {
+        document.getElementById('countryError').innerHTML = 'Please select your country';
+        isValid = false;
+    }
+
+    // Known languages validation
+    var languagesArray = [];
+    for (var j = 0; j < languages.length; j++) {
+        languagesArray.push(languages[j].value);
+    }
+    if (languagesArray.length === 0) {
+        document.getElementById('languagesError').innerHTML = 'Please select at least one known language';
+        isValid = false;
+    } else {
+        document.getElementById('enteredLanguages').innerText = languagesArray.join(', ');
+    }
+
+    // Enable the "Agree to terms" checkbox if all fields are filled
+    if (isValid) {
+        document.getElementById('checkbox').disabled = false;
+    }
+
+    // Populate table with entered data
+    if (isValid) {
+        document.getElementById('enteredName').innerText = name;
+        document.getElementById('enteredEmail').innerText = email;
+        document.getElementById('enteredPassword').innerText = password;
+        document.getElementById('enteredGender').innerText = gender.value;
+        document.getElementById('enteredCountry').innerText = country;
+    }
+
+    return false;
+}
+</script>
+
+<!-- Inline CSS styles -->
+<style>
+    .error {
+        color: red;
+        font-size: 0.9em;
+        font-style: italic;
+        margin-top: 5px;
+    }
+    .custom-input {
+        border-color: #28a745; /* Green border color */
+    }
+</style>
+
+</body>
+</html>
